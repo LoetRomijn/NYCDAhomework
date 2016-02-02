@@ -1,53 +1,95 @@
-User Information App - Web Server
-
-Create a Node.js application that is the beginning 
-of a user management system. Your users are all saved 
-in a "users.json" file, and you can currently do the following:
-- search for users
-- add new new users to your users file.
-- get your starter file here: users.jsonIn een nieuw venster bekijken
-
-Part 0
-Create one route:
-- route 1: renders a page that displays all your users.
-
-Part 1
-Create two more routes:
-- route 2: renders a page that displays a form which is your search bar.
-- route 3: takes in the post request from your form, then displays matching 
-users on a new page.
-
-Part 2
-Create two more routes:
-- route 4: renders a page with three forms on it (first name, last name, 
-	and email) that allows you to add new users to the users.json file.
-- route 5: takes in the post request from the 'create user' form, then 
-adds the user to the users.json file. Once that is complete, redirects 
-to the route that displays all your users (from part 0).
-
-
+// User Information App - Web Server
 
 var express = require('express');
 var fs = require('fs');
-
+var bodyParser = require('body-parser');
 var app = express();
 
 app.set('views', './src/views');
 app.set('view engine', 'jade');
 
-app.get('/', function (req, res) {
-	fs.readFile('./users.json', function (error, data) {
-		if (error) {
-			console.log(error);
+app.get('/', function(request, response) {
+	var users = [];
+	fs.readFile('./users.json', 'utf-8', function(err, data) {
+		if (err) {
+			throw err;
 		}
+		users = JSON.parse(data);
 
-		var parsedData = JSON.parse(data);
-		console.log('Users: ' + parsedData.length);
-
-		res.render('index', {countries: parsedData});
+		response.render('index', {
+			users: users
+		});
 	});
 });
 
-var server = app.listen(3000, function () {
-	console.log('Example app listening on port: ' + server.address().port);
+app.get('/users', function(request, response) {
+	var users = [];
+	fs.readFile('./users.json', 'utf-8', function(err, data) {
+		if (err) {
+			throw err;
+		}
+		users = JSON.parse(data);
+
+		response.render('users', {
+			users: users
+		});
+	});
+});
+
+app.get('/users/newusers', function(request, response) {
+	response.render('newusers');
+});
+
+app.get('/users/search', function(request, response) {
+	response.render('search');
+})
+
+app.post('/users/newusers', bodyParser.urlencoded({
+	extended: true
+}), function(request, response) {
+
+	fs.readFile('./users.json', "utf-8", function(err, data) {
+		if (err) {
+			throw err;
+		}
+		users = JSON.parse(data);
+		firstname = request.body.firstname;
+		lastname = request.body.lastname;
+		email = request.body.email;
+
+		newUser = {
+			firstname: request.body.firstname,
+			lastname: request.body.lastname,
+			email: request.body.email
+		};
+		users.push(newUser);
+
+		fs.writeFile('./users.json', JSON.stringify(users));
+		response.redirect('/')
+	});
+});
+
+
+app.post('/users/search', bodyParser.urlencoded({
+	extended: true
+}), function(request, response) {
+	fs.readFile('users.json', 'utf-8', function(err, data) {
+		if (err) {
+			throw err;
+		}
+		users = JSON.parse(data);
+		var results = [];
+		for (i = 0; i < users.length; i++) {
+			if (users[i].firstname === request.body.firstname || users[i].lastname === request.body.lastname) {
+				results = results.concat(users[i]);
+			}
+		}
+		response.render('searchresult', {
+			results: results
+		});
+	});
+});
+
+var server = app.listen(3000, function() {
+	console.log('UsersInfoApp listening on port: ' + server.address().port);
 });

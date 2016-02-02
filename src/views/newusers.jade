@@ -1,0 +1,12 @@
+html
+	head
+	body
+		a(href='/') Home
+		form(action='/users/newusers' method='post')
+			label Firstname
+			input(name='firstname')
+			label Lastname
+			input(name = 'lastname')
+			label email
+			input(name='email')
+			input(type='submit' value='create user')
