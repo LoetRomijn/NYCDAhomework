@@ -1,0 +1,8 @@
+html
+	head
+	body
+		a(href='/') Home
+		br
+		each user in users
+			li name: #{user.firstname} #{user.lastname}, email: #{user.email}
+	
