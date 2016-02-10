@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LoetRomijn/UserInfoAppNYCDA.git"
+    "url": "git+https://github.com/LoetRomijn/NYCDAhomework.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LoetRomijn/UserInfoAppNYCDA.git/issues"
+    "url": "https://github.com/LoetRomijn/NYCDAhomework/issues"
   },
-  "homepage": "https://github.com/LoetRomijn/UserInfoAppNYCDA#readme",
+  "homepage": "https://github.com/LoetRomijn/NYCDAhomework#readme",
   "dependencies": {
     "body-parser": "^1.14.2",
     "express": "^4.13.4",
